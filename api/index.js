@@ -356,23 +356,27 @@ app.post("/logout",(req,res)=>{
 //this is just creating the collection of sender and reciver id but the status is still requested   
 app.post("/addFriend", async (req, res) => {
     try {
-        const { receiverId, senderId } = req.body;
+        const { senderId,receiverId } = req.body;
+        // console.log(receiverId, senderId);
 
         // Check for existing friendship in both directions
-        const existingFriendship1 = await Friendship.findOne({ senderId, receiverId });
+        // const existingFriendship1 = await Friendship.findOne({ senderId, receiverId });
         const existingFriendship2 = await Friendship.findOne({ senderId: receiverId, receiverId: senderId });
 
-        if (existingFriendship1 || existingFriendship2) {
+        if (existingFriendship2) {
             return res.status(401).json({ message: "Friend request already sent" });
         }
 
         // Create a new friendship
-        const newFriend = await Friendship.create({ senderId, receiverId });
+        const newFriend = await Friendship.create({
+             "senderId":senderId,
+             "receiverId": receiverId 
+            });
 
         // Create a notification for the friend request
         const notification = await Notification.create({
-            senderId,
-            receiverId,
+            "senderId":senderId,
+            "receiverId": receiverId ,
             content: "sent you a Friend Request",
         });
 
@@ -418,21 +422,31 @@ app.post("/acceptFriend", async (req, res) => {
 
 
 
-//notification display
+// Notification display endpoint
 app.get("/notification/:userId", async (req, res) => {
     const userId = req.params.userId;
+
     try {
-        const notification = await Registration.findById(userId).populate("notifications");
-        res.json(notification.notifications);
+        // Count the number of notifications
+        const notificationCount = await Notification.countDocuments({ receiverId: userId, status: false });
+
+        // Get the notifications with sender details
+        const notifications = await Notification.find({ receiverId: userId, status: false })
+            .populate("senderId", "firstName surname profileImage")
+            .exec();
+
+        res.json({ notificationCount, notifications });
     } catch (error) {
-        res.json("Error: " + error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 });
+
+
 
 // get sender data
 
 // update code so that user get sender info at once with notification
-app.get("/senderinfo/:userId", async (req, res) => {
+app.get("/getSenderInfo/:userId", async (req, res) => {
     const userId = req.params.userId;
     console.log(userId);
     try {

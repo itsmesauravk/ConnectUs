@@ -51,6 +51,7 @@ export default function LoginPage({mode}) {
                 res.json().then((data) => {
                     setRedirect(true);
                     setUserInfo(data);
+                    localStorage.setItem("user", JSON.stringify(data));
                 });
             } else {
                 // alert("Invalid email or password");

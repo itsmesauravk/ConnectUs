@@ -13,7 +13,8 @@ const defaultFemaleImage = "https://cdn3.iconfinder.com/data/icons/business-avat
 const defaultCustomImage = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
 
 export default function YourPost({mode}) {
-  const { userInfo } = useContext(UserContext);
+  // const { userInfo } = useContext(UserContext);
+  const userInfo = JSON.parse(localStorage.getItem("user"));  
   const userId = userInfo.id;
   const [posts, setYourPosts] = useState([]);
   const [postId, setPostId] = useState("");

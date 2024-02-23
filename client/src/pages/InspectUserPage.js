@@ -25,11 +25,12 @@ export default function InspectUserPage({ mode }) {
         try {
             setLoading(true);
             const response = await axios.post(`${url}/addFriend`, {
-                senderId: ownerId,
-                reciverId: userId,
+                senderId: ownerId, 
+                receiverId: userId,
             });
             const newFriendStatus = response.data.newFriend.status;
             setAddFriendStatus(newFriendStatus);
+            console.log("response", response.data.newFriend.status);
 
             // Update localStorage to persist the friend request status
             localStorage.setItem(`friendStatus_${userId}`, newFriendStatus);
@@ -87,7 +88,7 @@ export default function InspectUserPage({ mode }) {
                             onClick={addFriend} 
                         >
                             {addFriendStatus === "requested" && "Requested"}
-                            {addFriendStatus === "accepted" && "Accepted"}
+                            {addFriendStatus === "accepted" && "Friends"}
                             {addFriendStatus === "rejected" && "Rejected"}
                             {addFriendStatus === "" && "Add Friend"}
                         </button>

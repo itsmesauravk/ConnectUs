@@ -6,7 +6,7 @@ const NotificationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Registration"
     },
-    reciverId:{
+    receiverId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Registration"
     },

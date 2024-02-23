@@ -3,7 +3,8 @@ import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export default function ProfileSetting({mode}){
-    const { userInfo } = useContext(UserContext)
+    // const { userInfo } = useContext(UserContext)
+    const userInfo = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
     const{setUserInfo} = useContext(UserContext)
     const userId = userInfo.id;
 

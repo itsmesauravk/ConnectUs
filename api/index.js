@@ -393,7 +393,7 @@ app.post("/addFriend", async (req, res) => {
 
 
 //accept the friend request
-app.post("/acceptFriend", async (req, res) => {
+app.post("/acceptRequest", async (req, res) => {
     try {
         const { senderId, receiverId } = req.body;
 

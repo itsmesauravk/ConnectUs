@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import { set } from "mongoose";
+
+
 
 const url = "http://localhost:4000";
 
@@ -13,6 +14,7 @@ export default function Notification() {
   const [redirect, setRedirect] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
   const [reqSenderId, setReqSenderId] = useState("");
+
  
 
 
@@ -21,8 +23,10 @@ export default function Notification() {
       try {
         const response = await axios.get(`${url}/notification/${userInfo.id}`);
         setNotificationData(response.data);
+        
       } catch (error) {
         console.log("Error getting friends: ", error);
+        
       }
     };
     getFriends();
@@ -42,8 +46,10 @@ export default function Notification() {
       console.log(response);
       if(response.data.success){
         console.log("Request accepted");
+       
       }else{
         setReqSenderId("");
+        
 
       }
     } catch (error) {
@@ -93,7 +99,7 @@ export default function Notification() {
                   <h1 className="italic text-gray-500">{notification.content}</h1>
                 </div>
               </div>
-              <div className="flex gap-1">
+                <div className="flex gap-1">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={()=>{setReqSenderId(notification.senderId._id)}}
@@ -107,6 +113,8 @@ export default function Notification() {
                   Reject
                 </button>
               </div>
+
+             
             </div>
           ))
         ) : (

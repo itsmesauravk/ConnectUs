@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { set } from "mongoose";
 
 const url = "http://localhost:4000";
 
@@ -11,6 +12,7 @@ export default function Notification() {
   
   const [redirect, setRedirect] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
+  const [reqSenderId, setReqSenderId] = useState("");
  
 
 
@@ -29,6 +31,29 @@ export default function Notification() {
 
   if (redirect) {
     return <Navigate to="/home" />;
+  }
+
+  const acceptRequest = async() =>{
+    try {
+      const response = await axios.post(`${url}/acceptRequest`, {
+        senderId: reqSenderId,
+        receiverId: userInfo.id
+      });
+      console.log(response);
+      if(response.data.success){
+        console.log("Request accepted");
+      }else{
+        setReqSenderId("");
+
+      }
+    } catch (error) {
+      console.log("Error accepting request: ", error);
+      setReqSenderId("");
+    }
+  }
+
+  if(reqSenderId){
+    acceptRequest();
   }
 
   // console.log("noti", notificationData);
@@ -71,6 +96,7 @@ export default function Notification() {
               <div className="flex gap-1">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={()=>{setReqSenderId(notification.senderId._id)}}
                 >
                   Accept
                 </button>
